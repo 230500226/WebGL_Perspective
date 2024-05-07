@@ -1,19 +1,40 @@
-# WebGL Boilerplate
+# WebGL Cube Demo with Perspective Matrix
 
-This repository, `WebGL_BoilerPlate`, contains the boilerplate code that will be the foundation for all my future WebGL projects.
+This repository contains a WebGL implementation of a cube with an application of a perspective matrix to appear in a perspective view.
 
-## Overview
+## Known Issues
 
-The boilerplate code in this repository is essentially a simple triangle rendered using WebGL. It serves as a starting point for more complex WebGL projects, providing the basic structure and error checking code that are common across such projects.
+The current implementation has an issue where the red face, which is the front of the cube, disappears when the perspective matrix is in use.
 
-## Features
+## The Perspective Matrix
 
-- **Simple Triangle**: The boilerplate code includes the implementation of a simple triangle in WebGL. This serves as a basic example of how to render a shape using WebGL.
+The main point of this repository is the use of a perspective matrix. The matrix used in this project is the Vulkan perspective matrix, which is defined as follows:
 
-- **Error Checking**: The code includes robust error checking mechanisms. This helps in identifying and handling potential issues that may arise during the execution of WebGL code.
+```javascript
+const vulkanPerspectiveMatrix = [
+    1/((w/h)*(Math.tan(vulkanTheta/2))), 0, 0, 0,
+    0, 1/(Math.tan(vulkanTheta/2)), 0, 0,
+    0, 0, far/(far-near), ((-far)*(near))/(far-near),
+    0, 0, 1, 0
+]
+```
 
-## Usage
+Where:
+- `w` and `h` are the width and height of the canvas.
+- `near` and `far` define the near and far spectrum of the z-axis.
+- `vulkanTheta` is the field of view (FOV) angle.
 
-To use this boilerplate for your WebGL projects, simply clone this repository and build upon the provided code.
+This matrix can be converted into a more readable format as follows:
 
+$$
+\begin{bmatrix}
+\frac{1}{{\frac{w}{h} \cdot \tan\left(\frac{{vulkanTheta}}{2}\right)}} & 0 & 0 & 0 \\
+0 & \frac{1}{{\tan\left(\frac{{vulkanTheta}}{2}\right)}} & 0 & 0 \\
+0 & 0 & \frac{{far}}{{far-near}} & \frac{{-far \cdot near}}{{far-near}} \\
+0 & 0 & 1 & 0 \\
+\end{bmatrix}
+$$
 
+## Learning Resources
+
+Most of the knowledge about the matrix used in this project came from a [YouTube video](https://youtu.be/U0_ONQQ5ZNM?si=87EWVEHGwkfG2oK7). This video provides a comprehensive explanation of the perspective matrix and its application in 3D graphics. It's a great resource for anyone looking to understand the underlying mathematics of 3D transformations.
